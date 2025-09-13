@@ -1,6 +1,6 @@
 
 VISIT THIS: https://pharma-chain-resilience-at-firebase.vercel.app/
-https://9000-firebase-studio-1757746211982.cluster-y3k7ko3fang56qzieg3trwgyfg.cloudworkstations.dev
+- https://9000-firebase-studio-1757746211982.cluster-y3k7ko3fang56qzieg3trwgyfg.cloudworkstations.dev
 
 # 🚀 Tech Stack Flow for Risk Management System
 This project demonstrates a complete **AI-driven risk management pipeline** that predicts, analyzes, and visualizes potential supply chain disruptions using real-time global signals.
