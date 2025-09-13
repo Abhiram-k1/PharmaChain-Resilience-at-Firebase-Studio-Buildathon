@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { PharmaChainLogo } from '@/components/icons';
@@ -10,9 +11,11 @@ import { Bot, Loader2 } from 'lucide-react';
 type DashboardHeaderProps = {
   onSimulate: () => void;
   isLoading: boolean;
+  productName: string;
+  onProductNameChange: (name: string) => void;
 };
 
-export function DashboardHeader({ onSimulate, isLoading }: DashboardHeaderProps) {
+export function DashboardHeader({ onSimulate, isLoading, productName, onProductNameChange }: DashboardHeaderProps) {
   const userAvatar = PlaceHolderImages.find(img => img.id === 'user-avatar');
 
   return (
@@ -25,6 +28,12 @@ export function DashboardHeader({ onSimulate, isLoading }: DashboardHeaderProps)
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <Input
+            placeholder="e.g., Ozempic"
+            className="w-48 bg-background"
+            value={productName}
+            onChange={(e) => onProductNameChange(e.target.value)}
+          />
           <Button onClick={onSimulate} disabled={isLoading} variant="outline" className="bg-primary/10 border-primary/50 text-primary hover:bg-primary/20 hover:text-primary">
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

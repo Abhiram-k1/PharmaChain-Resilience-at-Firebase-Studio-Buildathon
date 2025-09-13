@@ -17,6 +17,7 @@ const GetContingencyRecommendationsInputSchema = z.object({
   knownPharmaSuppliers: z
     .string()
     .describe('A list of known pharmaceutical suppliers.'),
+  productName: z.string().optional().describe('The specific pharmaceutical product to focus the analysis on.'),
 });
 export type GetContingencyRecommendationsInput = z.infer<
   typeof GetContingencyRecommendationsInputSchema
@@ -44,11 +45,13 @@ const prompt = ai.definePrompt({
   name: 'getContingencyRecommendationsPrompt',
   input: {schema: GetContingencyRecommendationsInputSchema},
   output: {schema: GetContingencyRecommendationsOutputSchema},
-  prompt: `Based on the following event details: {{{eventDetails}}},
+  prompt: `Based on the following event details for the drug {{{productName}}}: {{{eventDetails}}},
 and considering the following list of known pharmaceutical suppliers:
 {{{knownPharmaSuppliers}}},
 
 provide a detailed contingency plan to mitigate the risks associated with the event and recommend alternative suppliers.
+
+If no product name is provided, provide general recommendations.
 `,
 });
 

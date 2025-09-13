@@ -16,13 +16,14 @@ import { format } from 'date-fns';
 export default function DashboardPage() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [productName, setProductName] = useState('');
   const { toast } = useToast();
 
   const handleSimulateEvent = async () => {
     setIsLoading(true);
     try {
       const newsSnippet = mockNewsData[Math.floor(Math.random() * mockNewsData.length)];
-      const result = await processNewEvent(newsSnippet);
+      const result = await processNewEvent(newsSnippet, productName);
       
       if (!result) {
         throw new Error('Analysis failed to return a result.');
@@ -32,7 +33,7 @@ export default function DashboardPage() {
 
       toast({
         title: "New Event Analyzed",
-        description: "Supply chain risk assessment has been updated.",
+        description: `Supply chain risk assessment for ${productName || 'general overview'} has been updated.`,
       });
 
     } catch (error) {
@@ -83,13 +84,18 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <DashboardHeader onSimulate={handleSimulateEvent} isLoading={isLoading} />
+      <DashboardHeader 
+        onSimulate={handleSimulateEvent} 
+        isLoading={isLoading}
+        productName={productName}
+        onProductNameChange={setProductName}
+      />
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
         {events.length === 0 ? (
            <div className="flex flex-col items-center justify-center text-center h-[calc(100vh-150px)]">
               <h2 className="text-2xl font-headline font-semibold text-foreground/80">Welcome to PharmaChain Resilience</h2>
               <p className="mt-2 text-muted-foreground max-w-md">
-                Click the "Simulate New Event" button to begin analyzing pharmaceutical supply chain risks.
+                Enter a product name (optional) and click the "Simulate New Event" button to begin analyzing pharmaceutical supply chain risks.
               </p>
           </div>
         ) : (

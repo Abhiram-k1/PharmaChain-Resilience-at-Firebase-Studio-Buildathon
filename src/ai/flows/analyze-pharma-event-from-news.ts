@@ -12,6 +12,7 @@ import {z} from 'genkit';
 
 const AnalyzePharmaEventFromNewsInputSchema = z.object({
   newsText: z.string().describe('The text from a news article about a potential pharmaceutical supply chain event.'),
+  productName: z.string().optional().describe('The specific pharmaceutical product to focus the analysis on.'),
 });
 export type AnalyzePharmaEventFromNewsInput = z.infer<typeof AnalyzePharmaEventFromNewsInputSchema>;
 
@@ -32,11 +33,13 @@ const analyzePharmaEventFromNewsPrompt = ai.definePrompt({
   name: 'analyzePharmaEventFromNewsPrompt',
   input: {schema: AnalyzePharmaEventFromNewsInputSchema},
   output: {schema: AnalyzePharmaEventFromNewsOutputSchema},
-  prompt: `You are an expert in pharmaceutical supply chain risk analysis. Analyze the following news text to assess potential risks to the supply chain.
+  prompt: `You are an expert in pharmaceutical supply chain risk analysis. Analyze the following news text to assess potential risks to the supply chain for the drug: {{{productName}}}.
 
 News Text: {{{newsText}}}
 
 Consider risks such as cold chain integrity, regulatory compliance, quality control, and supplier concentration. Generate a risk score (0-100), severity level (Low, Medium, High, Critical), a brief summary, the affected location, and recommended contingency plans.
+
+If no product name is provided, perform a general analysis.
 
 Output in JSON format.
 `,
