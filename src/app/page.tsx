@@ -12,6 +12,8 @@ import { RiskMap } from '@/components/dashboard/risk-map';
 import { AlertFeed } from '@/components/dashboard/alert-feed';
 import { ContingencyPlan } from '@/components/dashboard/contingency-plan';
 import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { PharmaChainLogo } from '@/components/icons';
 
 export default function DashboardPage() {
   const [events, setEvents] = useState<EventData[]>([]);
@@ -92,24 +94,34 @@ export default function DashboardPage() {
       />
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
         {events.length === 0 ? (
-           <div className="flex flex-col items-center justify-center text-center h-[calc(100vh-150px)]">
-              <h2 className="text-2xl font-headline font-semibold text-foreground/80">Welcome to PharmaChain Resilience</h2>
-              <p className="mt-2 text-muted-foreground max-w-md">
-                Enter a product name (optional) and click the "Simulate New Event" button to begin analyzing pharmaceutical supply chain risks.
+           <div className="flex flex-col items-center justify-center text-center h-[calc(100vh-200px)]">
+              <div className="relative mb-4">
+                <PharmaChainLogo className="h-24 w-24 text-primary opacity-10" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-16 w-16 rounded-full bg-primary/10 animate-ping"></div>
+                </div>
+              </div>
+              <h2 className="text-3xl font-headline font-bold text-foreground">Welcome to PharmaChain Resilience</h2>
+              <p className="mt-3 text-muted-foreground max-w-lg">
+                Your AI-powered command center for navigating pharmaceutical supply chain risks. 
+                Enter a product name (optional) and simulate an event to begin.
               </p>
+              <Button onClick={handleSimulateEvent} disabled={isLoading} className="mt-6">
+                Simulate Your First Event
+              </Button>
           </div>
         ) : (
           <div className="mx-auto grid max-w-screen-2xl grid-cols-12 gap-6">
-            <div className="col-span-12 lg:col-span-3">
+            <div className="col-span-12 lg:col-span-4 xl:col-span-3">
               <RiskScoreCard score={aggregatedRiskScore} />
             </div>
-            <div className="col-span-12 lg:col-span-9">
+            <div className="col-span-12 lg:col-span-8 xl:col-span-9">
               <RiskTimelineChart data={timelineData} />
             </div>
-            <div className="col-span-12 lg:col-span-7">
+            <div className="col-span-12 xl:col-span-7">
               <RiskMap markers={mapMarkers} />
             </div>
-            <div className="col-span-12 lg:col-span-5">
+            <div className="col-span-12 xl:col-span-5">
               <AlertFeed events={events} />
             </div>
             <div className="col-span-12">
