@@ -26,10 +26,10 @@ export type GetContingencyRecommendationsInput = z.infer<
 const GetContingencyRecommendationsOutputSchema = z.object({
   contingencyPlan: z
     .string()
-    .describe('A detailed plan to mitigate the risks associated with the event.'),
+    .describe('A detailed, multi-step plan to mitigate the risks associated with the event. Use bullet points for clarity.'),
   alternativeSuppliers: z
     .string()
-    .describe('A list of recommended alternative suppliers.'),
+    .describe('A list of 3-5 recommended alternative suppliers, including their location and a brief justification for their suitability. Format as a list.'),
 });
 export type GetContingencyRecommendationsOutput = z.infer<
   typeof GetContingencyRecommendationsOutputSchema
@@ -45,13 +45,18 @@ const prompt = ai.definePrompt({
   name: 'getContingencyRecommendationsPrompt',
   input: {schema: GetContingencyRecommendationsInputSchema},
   output: {schema: GetContingencyRecommendationsOutputSchema},
-  prompt: `Based on the following event details for the drug {{{productName}}}: {{{eventDetails}}},
-and considering the following list of known pharmaceutical suppliers:
-{{{knownPharmaSuppliers}}},
+  prompt: `You are a strategic sourcing specialist for the pharmaceutical industry.
+Based on the following event summary concerning the drug "{{{productName}}}":
+"{{{eventDetails}}}"
 
-provide a detailed contingency plan to mitigate the risks associated with the event and recommend alternative suppliers.
+And considering this list of potential pharmaceutical suppliers:
+"{{{knownPharmaSuppliers}}}"
 
-If no product name is provided, provide general recommendations.
+Provide the following in a structured JSON format:
+1.  **contingencyPlan:** A detailed, multi-step contingency plan. Use bullet points to outline immediate, short-term, and long-term actions.
+2.  **alternativeSuppliers:** A list of 3-5 alternative suppliers from the provided list. For each supplier, specify their likely location and a brief rationale for why they are a good alternative (e.g., "diversified geographic risk," "specializes in sterile injectables"). If the provided list is not relevant, state that and suggest supplier discovery strategies.
+
+If no specific product name is provided, offer general advice applicable to the broader pharmaceutical supply chain.
 `,
 });
 

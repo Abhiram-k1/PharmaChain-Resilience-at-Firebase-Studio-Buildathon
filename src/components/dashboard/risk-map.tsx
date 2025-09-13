@@ -1,7 +1,7 @@
 'use client';
 
 import { APIProvider, Map, AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GOOGLE_MAPS_API_KEY } from '@/app/config';
 import type { MapMarkerData } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,27 @@ const severityColors = {
 
 export function RiskMap({ markers }: { markers: MapMarkerData[] }) {
   const [activeMarker, setActiveMarker] = useState<MapMarkerData | null>(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 20, lng: 0 });
+  const [zoomLevel, setZoomLevel] = useState(1);
+
+  useEffect(() => {
+    if (markers.length > 0) {
+      if (markers.length === 1) {
+        setMapCenter(markers[0].position);
+        setZoomLevel(4);
+      } else {
+        // Simple average for multi-marker centering, can be improved with bounds calculation
+        const avgLat = markers.reduce((acc, m) => acc + m.position.lat, 0) / markers.length;
+        const avgLng = markers.reduce((acc, m) => acc + m.position.lng, 0) / markers.length;
+        setMapCenter({ lat: avgLat, lng: avgLng });
+        setZoomLevel(2); // A more zoomed-out view for multiple markers
+      }
+    } else {
+        setMapCenter({ lat: 20, lng: 0 });
+        setZoomLevel(1);
+    }
+  }, [markers]);
+
 
   if (!GOOGLE_MAPS_API_KEY) {
     return (
@@ -36,8 +57,6 @@ export function RiskMap({ markers }: { markers: MapMarkerData[] }) {
     );
   }
 
-  const mapCenter = markers.length > 0 ? markers[0].position : { lat: 20, lng: 0 };
-
   return (
     <Card className="h-full flex flex-col shadow-lg rounded-lg overflow-hidden">
       <CardHeader>
@@ -50,10 +69,11 @@ export function RiskMap({ markers }: { markers: MapMarkerData[] }) {
       <CardContent className="flex-1 p-0">
         <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
           <Map
+            key={`${mapCenter.lat}-${mapCenter.lng}-${zoomLevel}`}
             mapId="pharmachain-resilience-map"
             style={{ width: '100%', height: '100%' }}
-            defaultCenter={mapCenter}
-            defaultZoom={markers.length > 0 ? 3 : 1}
+            center={mapCenter}
+            zoom={zoomLevel}
             gestureHandling={'greedy'}
             disableDefaultUI={true}
           >
