@@ -14,10 +14,10 @@ import type { EventData } from '@/lib/types';
 import { AlertTriangle, Info } from 'lucide-react';
 
 const severityConfig = {
-  Critical: 'bg-red-500 border-red-500',
-  High: 'bg-orange-500 border-orange-500',
-  Medium: 'bg-yellow-500 border-yellow-500',
-  Low: 'bg-green-500 border-green-500',
+  Critical: 'bg-red-500 border-red-500 text-white',
+  High: 'bg-orange-500 border-orange-500 text-white',
+  Medium: 'bg-yellow-500 border-yellow-500 text-black',
+  Low: 'bg-green-500 border-green-500 text-white',
 };
 
 export function AlertFeed({ events }: { events: EventData[] }) {
@@ -41,7 +41,7 @@ export function AlertFeed({ events }: { events: EventData[] }) {
                   <div className="flex-shrink-0">
                     <Badge
                       className={cn(
-                        'w-20 justify-center text-primary-foreground',
+                        'w-20 justify-center',
                         severityConfig[analysis.severity]
                       )}
                     >

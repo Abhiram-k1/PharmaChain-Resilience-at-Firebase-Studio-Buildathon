@@ -13,7 +13,7 @@ import { ShieldCheck } from 'lucide-react';
 function getRiskColor(score: number): string {
   if (score > 75) return 'text-red-500';
   if (score > 50) return 'text-orange-500';
-  if (score > 25) return 'text-yellow-500';
+  if (score > 25) return 'text-yellow-400';
   return 'text-green-500';
 }
 
